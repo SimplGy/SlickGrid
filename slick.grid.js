@@ -70,6 +70,7 @@ if (typeof Slick === "undefined") {
       asyncEditorLoadDelay: 100,
       forceFitColumns: false,
       enableAsyncPostRender: false,
+      asyncPostRenderBatchSize: 5,
       asyncPostRenderDelay: 50,
       autoHeight: false,
       editorLock: Slick.GlobalEditorLock,
@@ -2631,6 +2632,7 @@ if (typeof Slick === "undefined") {
 
     function asyncPostProcessRows() {
       var dataLength = getDataLength();
+      var c = 0;
       while (postProcessFromRow <= postProcessToRow) {
         var row = (vScrollDir >= 0) ? postProcessFromRow++ : postProcessToRow--;
         var cacheEntry = rowsCache[row];
@@ -2664,8 +2666,12 @@ if (typeof Slick === "undefined") {
           }
         }
 
-        h_postrender = setTimeout(asyncPostProcessRows, options.asyncPostRenderDelay);
-        return;
+        c++;
+
+        if (c > options.asyncPostRenderBatchSize) {
+          h_postrender = setTimeout(asyncPostProcessRows, options.asyncPostRenderDelay);
+          return;
+        }
       }
     }
 
