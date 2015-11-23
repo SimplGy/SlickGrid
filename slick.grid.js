@@ -2465,6 +2465,11 @@ if (typeof Slick === "undefined") {
         }
       }
 
+      var positionDifference =  $(topCanvas.el[0]).position().left - $(contentCanvas.el[0]).position().left;
+      if(positionDifference >= 0){
+        $(header.el[0]).css("left", -positionDifference );
+      }
+
       trigger(self.onScroll, {scrollLeft: scrollLeft, scrollTop: scrollTop});
     }
 
