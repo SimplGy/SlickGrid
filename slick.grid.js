@@ -1418,7 +1418,7 @@ if (typeof Slick === "undefined") {
       var h;
       for (var i = 0, headers = header.el.children(), ii = headers.length; i < ii; i++) {
         h = $(headers[i]);
-        if (h.width() !== columns[i].width) {
+        if (h && columns[i] && h.width() !== columns[i].width) {
           h.width(columns[i].width);
         }
       }
