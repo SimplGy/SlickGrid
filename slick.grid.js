@@ -745,15 +745,15 @@ if (typeof Slick === "undefined") {
           .attr("title", m.toolTip || "")
           .data("column", m)
           .addClass(m.headerCssClass || "")
-          .bind("dragstart", { distance: 3 }, function(e, dd) {
-            trigger(self.onHeaderColumnDragStart, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          })
-          .bind("drag", function(e, dd) {
-            trigger(self.onHeaderColumnDrag, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          })
-          .bind("dragend", function(e, dd) {
-            trigger(self.onHeaderColumnDragEnd, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          })
+          //.bind("dragstart", { distance: 3 }, function(e, dd) {
+          //  trigger(self.onHeaderColumnDragStart, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
+          //})
+          //.bind("drag", function(e, dd) {
+          //  trigger(self.onHeaderColumnDrag, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
+          //})
+          //.bind("dragend", function(e, dd) {
+          //  trigger(self.onHeaderColumnDragEnd, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
+          //})
           .appendTo($headerHolder);
 
         if (options.enableColumnReorder || m.sortable) {
@@ -865,15 +865,16 @@ if (typeof Slick === "undefined") {
     }
 
     function setupColumnReorder() {
-      topCanvas.el.filter(":ui-sortable").sortable("destroy");
-      topCanvas.el.sortable({
-        containment: "parent",
+      var header = $('.header', topCanvas.el[0]);
+      header.find(":ui-sortable").sortable("destroy");
+      header.sortable({
+        containment: "document",
         distance: 3,
         axis: "x",
         cursor: "default",
         tolerance: "intersection",
         helper: "clone",
-        placeholder: "slick-sortable-placeholder ui-state-default slick-header-column",
+        placeholder: "slick-sortable-placeholder ui-state-default cell",
         start: function (e, ui) {
           ui.placeholder.width(ui.helper.outerWidth()); // - headerColumnWidthDiff);
           $(ui.helper).addClass("slick-header-column-active");
@@ -887,12 +888,15 @@ if (typeof Slick === "undefined") {
             return;
           }
 
-          var reorderedIds = topCanvas.el.sortable("toArray");
+          var reorderedIds = header.sortable("toArray");
           var reorderedColumns = [];
           for (var i = 0; i < reorderedIds.length; i++) {
-            reorderedColumns.push(columns[getColumnIndex(reorderedIds[i].replace(uid, ""))]);
+            var col = columns[getColumnIndex(reorderedIds[i].replace(uid+"_", ""))];
+            if(col) {
+              reorderedColumns.push(col);
+            }
           }
-          setColumns(reorderedColumns);
+          setColumns(reorderedColumns, {});
 
           trigger(self.onColumnsReordered, {});
           e.stopPropagation();
@@ -1314,9 +1318,9 @@ if (typeof Slick === "undefined") {
     // If you provide an index, it returns only that column
     function getHeaderEls(idx) {
       if (idx == null) {
-        return header.el.children()
+        return header.el.children(".cell");
       } else {
-        return header.el.children().eq(idx)
+        return header.el.children(".cell").eq(idx);
       }
     }
 
