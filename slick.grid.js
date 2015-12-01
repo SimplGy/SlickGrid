@@ -22,7 +22,7 @@ if (typeof jQuery === "undefined") {
   throw "SlickGrid requires jquery module to be loaded";
 }
 if (!jQuery.fn.drag) {
-  throw "SlickGrid requires jquery.event.drag module to be loaded";
+  //throw "SlickGrid requires jquery.event.drag module to be loaded";
 }
 if (typeof Slick === "undefined") {
   throw "slick.core.js not loaded";
@@ -260,7 +260,7 @@ if (typeof Slick === "undefined") {
 
       // validate loaded JavaScript modules against requested options
       if (options.enableColumnReorder && !$.fn.sortable) {
-        throw new Error("SlickGrid's 'enableColumnReorder = true' option requires jquery-ui.sortable module to be loaded");
+        //throw new Error("SlickGrid's 'enableColumnReorder = true' option requires jquery-ui.sortable module to be loaded");
       }
 
       editController = {
@@ -745,15 +745,6 @@ if (typeof Slick === "undefined") {
           .attr("title", m.toolTip || "")
           .data("column", m)
           .addClass(m.headerCssClass || "")
-          //.bind("dragstart", { distance: 3 }, function(e, dd) {
-          //  trigger(self.onHeaderColumnDragStart, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          //})
-          //.bind("drag", function(e, dd) {
-          //  trigger(self.onHeaderColumnDrag, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          //})
-          //.bind("dragend", function(e, dd) {
-          //  trigger(self.onHeaderColumnDragEnd, { "origEvent": e, "dragData": dd, "node": this, "columnIndex": getColumnIndexFromEvent(e) })
-          //})
           .appendTo($headerHolder);
 
         if (options.enableColumnReorder || m.sortable) {
@@ -866,32 +857,18 @@ if (typeof Slick === "undefined") {
 
     function setupColumnReorder() {
       var header = $('.header', topCanvas.el[0]);
-      header.find(":ui-sortable").sortable("destroy");
-      header.sortable({
-        containment: "document",
-        distance: 3,
-        axis: "x",
-        cursor: "default",
-        tolerance: "intersection",
-        helper: "clone",
-        placeholder: "slick-sortable-placeholder ui-state-default cell",
-        start: function (e, ui) {
-          ui.placeholder.width(ui.helper.outerWidth()); // - headerColumnWidthDiff);
-          $(ui.helper).addClass("slick-header-column-active");
+      Sortable.create(header[0],{
+        filter: ".resizer",
+        onStart: function (evt) {
         },
-        beforeStop: function (e, ui) {
-          $(ui.helper).removeClass("slick-header-column-active");
-        },
-        stop: function (e) {
-          if (!getEditorLock().commitCurrentEdit()) {
-            $(this).sortable("cancel");
-            return;
-          }
-
-          var reorderedIds = header.sortable("toArray");
+        onUpdate: function (e) {
+          var reorderedIds = [];
+           $(".header .cell").each(function(key,value){
+             reorderedIds.push($(value).attr("id").replace(uid+"_",""))
+          });
           var reorderedColumns = [];
           for (var i = 0; i < reorderedIds.length; i++) {
-            var col = columns[getColumnIndex(reorderedIds[i].replace(uid+"_", ""))];
+            var col = columns[getColumnIndex(reorderedIds[i])];
             if(col) {
               reorderedColumns.push(col);
             }
@@ -903,6 +880,7 @@ if (typeof Slick === "undefined") {
           setupColumnResize();
         }
       });
+
     }
 
     function setupColumnResize() {
@@ -919,6 +897,7 @@ if (typeof Slick === "undefined") {
           lastResizable = i;
         }
       });
+
       if (firstResizable === undefined) { return; }
       // Configure resizing on each column
       columnElements.each(function (i, e) {
