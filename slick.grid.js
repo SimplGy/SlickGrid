@@ -258,7 +258,7 @@ if (typeof Slick === "undefined") {
       enforceWidthLimits(columns);
 
       // validate loaded JavaScript modules against requested options
-      if (options.enableColumnReorder && !Sortable) {
+      if (options.enableColumnReorder &&  !window.Sortable) {
         throw new Error("SlickGrid's 'enableColumnReorder = true' option requires Sortable module to be loaded");
       }
 
@@ -873,10 +873,10 @@ if (typeof Slick === "undefined") {
       if(sortable){
         sortable.destroy();
       }
-      var header = $('.header', topCanvas.el[0]);
+      var pinnedHeaderNumber = isPinned ? 1 : 0;
+      var header = $('.header', topCanvas.el[pinnedHeaderNumber]);
       sortable = Sortable.create(header[0],{
         filter: ".resizer",
-        forceFallback: true,
         onStart: function () {
           header.find(".cell").each(function(key,value) {
             var el = $(value);
