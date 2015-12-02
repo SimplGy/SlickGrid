@@ -855,13 +855,37 @@ if (typeof Slick === "undefined") {
       });
     }
 
+
+    function findClass(haystack, startWith ){
+      var classArray = haystack.split(" ");
+      var result;
+      for(var i = 0; i < classArray.length; i++) {
+        if (classArray[i].indexOf(startWith) == 0){
+          result = classArray[i];
+          i = classArray.length;
+        }
+      }
+      return result;
+    }
+
     function setupColumnReorder() {
       var header = $('.header', topCanvas.el[0]);
       Sortable.create(header[0],{
         filter: ".resizer",
-        onStart: function (evt) {
+        onStart: function () {
+          header.find(".cell").each(function(key,value) {
+            var el = $(value);
+            var elementClass = el.attr("class");
+            el.css("width", el.outerWidth()+"px");
+            el.css("height", el.outerHeight()+"px");
+            el.css("float","left");
+            el.css("position","relative");
+            el.removeClass(function () {
+              return findClass(elementClass, "l")+ " "+ findClass(elementClass, "r");
+            })
+          });
         },
-        onUpdate: function (e) {
+        onEnd: function (e) {
           var reorderedIds = [];
            $(".header .cell").each(function(key,value){
              reorderedIds.push($(value).attr("id").replace(uid+"_",""))
