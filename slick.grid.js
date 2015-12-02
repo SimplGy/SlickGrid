@@ -1262,7 +1262,7 @@ if (typeof Slick === "undefined") {
       }
 
       if (options.enableColumnReorder) {
-        header.el.filter(":ui-sortable").sortable("destroy");
+        sortable.destroy();
       }
 
       unbindAncestorScrollEvents();
