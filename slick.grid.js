@@ -21,7 +21,7 @@
 if (typeof jQuery === "undefined") {
   throw "SlickGrid requires jquery module to be loaded";
 }
-if (!Sortable) {
+if (typeof Sortable === "undefined") {
   throw "SlickGrid requires Sortable module to be loaded";
 }
 if (typeof Slick === "undefined") {
