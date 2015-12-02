@@ -877,7 +877,6 @@ if (typeof Slick === "undefined") {
             var el = $(value);
             var elementClass = el.attr("class");
             el.css("width", el.outerWidth()+"px");
-            el.css("height", el.outerHeight()+"px");
             el.css("float","left");
             el.css("position","relative");
             el.removeClass(function () {
