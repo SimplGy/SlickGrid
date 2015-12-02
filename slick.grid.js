@@ -162,6 +162,8 @@ if (typeof Slick === "undefined") {
     var columnPosLeft = [];
     var columnPosRight = [];
 
+    var sortable;
+
 
     // async call handles
     var h_editorLoader = null;
@@ -868,10 +870,16 @@ if (typeof Slick === "undefined") {
       return result;
     }
 
+
+
     function setupColumnReorder() {
+      if(sortable){
+        sortable.destroy();
+      }
       var header = $('.header', topCanvas.el[0]);
-      Sortable.create(header[0],{
+      sortable = Sortable.create(header[0],{
         filter: ".resizer",
+        forceFallback: true,
         onStart: function () {
           header.find(".cell").each(function(key,value) {
             var el = $(value);
