@@ -21,8 +21,8 @@
 if (typeof jQuery === "undefined") {
   throw "SlickGrid requires jquery module to be loaded";
 }
-if (!jQuery.fn.drag) {
-  //throw "SlickGrid requires jquery.event.drag module to be loaded";
+if (!Sortable) {
+  throw "SlickGrid requires Sortable module to be loaded";
 }
 if (typeof Slick === "undefined") {
   throw "slick.core.js not loaded";
