@@ -21,9 +21,6 @@
 if (typeof jQuery === "undefined") {
   throw "SlickGrid requires jquery module to be loaded";
 }
-if (typeof Sortable === "undefined") {
-  throw "SlickGrid requires Sortable module to be loaded";
-}
 if (typeof Slick === "undefined") {
   throw "slick.core.js not loaded";
 }
@@ -261,8 +258,8 @@ if (typeof Slick === "undefined") {
       enforceWidthLimits(columns);
 
       // validate loaded JavaScript modules against requested options
-      if (options.enableColumnReorder && !$.fn.sortable) {
-        //throw new Error("SlickGrid's 'enableColumnReorder = true' option requires jquery-ui.sortable module to be loaded");
+      if (options.enableColumnReorder && !Sortable) {
+        throw new Error("SlickGrid's 'enableColumnReorder = true' option requires Sortable module to be loaded");
       }
 
       editController = {
