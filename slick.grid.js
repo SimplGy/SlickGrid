@@ -2475,10 +2475,10 @@ if (typeof Slick === "undefined") {
           trigger(self.onViewportChanged, {});
         }
       }
-
-      var positionDifference =  $(topCanvas.el[0]).position().left - $(contentCanvas.el[0]).position().left;
+      var headerColumnNumber = isPinned ?  1 : 0;
+      var positionDifference =  $(topCanvas.el[headerColumnNumber]).position().left - $(contentCanvas.el[headerColumnNumber]).position().left;
       if(positionDifference >= 0){
-        $(header.el[0]).css("left", -positionDifference );
+        $(header.el[headerColumnNumber]).css("left", -positionDifference );
       }
 
       trigger(self.onScroll, {scrollLeft: scrollLeft, scrollTop: scrollTop});
