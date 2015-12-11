@@ -935,6 +935,7 @@ if (typeof Slick === "undefined") {
         $("<div class='resizer' />")
           .appendTo(e)
           .bind("dragstart", function (e, dd) {
+            trigger(self.onHeaderColumnDragStart, this);
             if (!getEditorLock().commitCurrentEdit()) {
               return false;
             }
@@ -999,6 +1000,7 @@ if (typeof Slick === "undefined") {
             minPageX = pageX - Math.min(shrinkLeewayOnLeft, stretchLeewayOnRight);
           })
           .bind("drag", function (e, dd) {
+            trigger(self.onHeaderColumnDrag, this);
             var actualMinWidth, d = Math.min(maxPageX, Math.max(minPageX, e.pageX)) - pageX, x;
             if (d < 0) { // shrink column
               x = d;
@@ -1078,6 +1080,7 @@ if (typeof Slick === "undefined") {
             }
           })
           .bind("dragend", function (e, dd) {
+            trigger(self.onHeaderColumnDragEnd, this);
             var newWidth;
             $(this).parent().removeClass("active");
             for (j = 0; j < columnElements.length; j++) {
