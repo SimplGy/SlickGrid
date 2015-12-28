@@ -26,6 +26,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "antiscroll": "bcherny/antiscroll"
+    "antiscroll": "bcherny/antiscroll",
+    "sortable": "https://github.com/RubaXa/Sortable.git"
   }
 }
