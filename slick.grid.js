@@ -17,6 +17,8 @@
  *
  */
 
+'use strict';
+
 // make sure required JavaScript modules are loaded
 if (typeof jQuery === "undefined") {
   throw "SlickGrid requires jquery module to be loaded";
@@ -773,6 +775,10 @@ if (typeof Slick === "undefined") {
         if (m.sortable) {
           oneHeader.addClass("slick-header-sortable");
           oneHeader.append("<span class='slick-sort-indicator' />");
+        }
+
+        if (m.hidden && !m.showHidden) {
+          oneHeader.addClass('hidden');
         }
 
         trigger(self.onHeaderCellRendered, { "node": oneHeader[0], "column": m });
@@ -1533,12 +1539,18 @@ if (typeof Slick === "undefined") {
       columnIdxById = {};
       for (var i = 0; i < cols.length; i++) {
         var m = cols[i];
+
         // Changing the object reference can cause problems for external consumers of that object, so we're careful to maintain it using this crazy double extend.
-        tempCol = $.extend({}, columnDefaults, m);
+        var tempCol = $.extend({}, columnDefaults, m);
         $.extend(m, tempCol);
         columnIdxById[m.id] = i;
-        if (m.minWidth && m.width < m.minWidth) { m.width = m.minWidth; }
-        if (m.maxWidth && m.width > m.maxWidth) { m.width = m.maxWidth; }
+        if (m.hidden && !m.showHidden) {
+          m.width = 0;
+        } else if (m.minWidth && m.width < m.minWidth) {
+          m.width = m.minWidth;
+        } else if (m.maxWidth && m.width > m.maxWidth) {
+          m.width = m.maxWidth;
+        }
       }
     }
 
@@ -1784,7 +1796,6 @@ if (typeof Slick === "undefined") {
 
       var colspan, m;
       for (var i = 0, ii = columns.length; i < ii; i++) {
-        m = columns[i];
         colspan = 1;
         if (metadata && metadata.columns) {
           var columnData = metadata.columns[m.id] || metadata.columns[i];
@@ -1824,8 +1835,14 @@ if (typeof Slick === "undefined") {
 
     function appendCellHtml(markupArray, row, cell, colspan, item) {
       var m = columns[cell];
-      var cellCss = "cell l" + cell + " r" + Math.min(columns.length - 1, cell + colspan - 1) +
+      var cellCss ="cell l" + cell +
+        " r" + Math.min(columns.length - 1, cell + colspan - 1) +
         (m.cssClass ? " " + m.cssClass : "");
+
+      if (m.hidden && !m.showHidden) {
+        cellCss += ' hidden';
+      }
+
       if (row === activeRow && cell === activeCell) {
         cellCss += (" active");
       }
@@ -3755,6 +3772,41 @@ if (typeof Slick === "undefined") {
         .length > 0;
     }
 
+    function getHiddenColumns() {
+      return columns.filter(function(column) {
+        return column.hidden;
+      });
+    }
+
+    function isAnyColumnHidden() {
+      return columns.some(function(column) {
+        return column.hidden;
+      });
+    }
+
+    function isAnyColumnHiddenAndNotShown() {
+      return columns.some(function(column) {
+        return column.hidden && !column.showHidden;
+      });
+    }
+
+    function hideHiddenColumn(idx) {
+      // TODOCK
+      setColumns(columns);
+    }
+
+    function showHiddenColumn(idx) {
+      // TODOCK
+      setColumns(columns);
+    }
+
+    function toggleHiddenColumns() {
+      var showHidden = isAnyColumnHiddenAndNotShown();
+      getHiddenColumns().forEach(function(column) {
+        column.showHidden = showHidden;
+      });
+      setColumns(columns);
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Debug
@@ -3870,6 +3922,8 @@ if (typeof Slick === "undefined") {
       "getColumnIndex": getColumnIndex,
       "getColumnNodeById": getColumnNodeById,
       "updateColumnHeader": updateColumnHeader,
+      "isAnyColumnHidden": isAnyColumnHidden,
+      "toggleHiddenColumns": toggleHiddenColumns,
       "updateSubHeaders": updateSubHeaders,
       "createColumnHeaders": createColumnHeaders,
       "setSortColumn": setSortColumn,
