@@ -30,6 +30,8 @@
 .slickGrid {
   overflow: hidden;
   outline: 0; }
+  .slickGrid .isHidden {
+    display: none; }
   .slickGrid .row.even {
     background: #f9f9f9; }
   .slickGrid .focus-sink {
@@ -179,5 +181,3 @@
   z-index: 10;
   position: absolute;
   border: 2px dashed black; }
-
-/*# sourceMappingURL=slick.grid.css.map */
