@@ -1,18 +1,21 @@
 {
   "name": "slickgrid",
-  "version": "3.4.0",
+  "version": "3.6.0",
   "main": [
     "slick.core.js",
     "slick.grid.js",
     "slick.grid.css"
   ],
   "ignore": [],
-  "homepage": "https://github.com/SimpleAsCouldBe/SlickGrid",
+  "homepage": "https://github.com/coatue/SlickGrid",
   "authors": [
     "Michael Leibman",
-    "Eric Miller"
+    "Eric Miller",
+    "Albert Wu",
+    "Boris Cherny <boris@performancejs.com>",
+    "Chris Khoo"
   ],
-  "description": "Slickgrid with pinning, more customizability, and faster column sizing.",
+  "description": "SlickGrid with pinning, more customizability & faster column sizing",
   "moduleType": [
     "globals"
   ],
